@@ -1,0 +1,7 @@
+# SSL
+./.docker/backend/nginx/ssl/*.crt
+./docker/backend/nginx/ssl/*.csr
+./.docker/backend/nginx/ssl/*.key
+
+# Docker
+docker-compose.yml

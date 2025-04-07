@@ -1,0 +1,52 @@
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: .
+      dockerfile: ./.docker/frontend/dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      WATCHPACK_POLLING=true
+    volumes:
+      - ./nextjs:/app
+    depends_on:
+      - backend
+
+  # Backend service
+  backend:
+    build:
+      context: .
+      dockerfile: ./.docker/backend/dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./laravel:/var/www/html
+      - ./.docker/backend/laravel/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./.docker/backend/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      # SSL certificates
+      - ./.docker/backend/nginx/ssl/web-server.crt:/etc/nginx/ssl/web-server.crt
+      - ./.docker/backend/nginx/ssl/web-server.key:/etc/nginx/ssl/web-server.key
+    depends_on:
+      - db
+
+  # Database service
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      # Change your MySQL settings here
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nextapp
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

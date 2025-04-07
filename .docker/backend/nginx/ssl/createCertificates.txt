@@ -1,0 +1,4 @@
+参考：https://pvision.jp/tech/2024/03/install-nginx-with-https/
+
+$ openssl req -new -key web-server.key -out web-server.csr
+$ openssl x509 -in web-server.csr -out web-server.crt -req -signkey web-server.key -days 365
