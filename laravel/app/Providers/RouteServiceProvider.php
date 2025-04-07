@@ -9,11 +9,9 @@ class RouteServiceProvider extends ServiceProvider
 {
 
     /**
-     * Register any application services.
-     *
-     * @return void
+     * Bootstrap services.
      */
-    public function register()
+    public function boot()
     {
         $this->routes(function () {
             Route::prefix('api')
